@@ -15,9 +15,14 @@
 #define NUM_NEURONES_HIDDEN 2
 #define NUM_NEURONES_OUTPUT 4
 
-#define LEARNING_RATE 0.0001
-#define NUM_ITERATIONS 1000
+double neurone_input[NUM_NEURONES_INPUT];
+double neurone_hidden[NUM_NEURONES_HIDDEN];
+double neurone_output[NUM_NEURONES_OUTPUT];
 
+double weight_i_h[NUM_NEURONES_INPUT][NUM_NEURONES_HIDDEN];
+double weight_h_o[NUM_NEURONES_HIDDEN][NUM_NEURONES_OUTPUT];
 
+extern void MLP_Weights_Init();
+extern void MLP_Evaluate();
 
 #endif
