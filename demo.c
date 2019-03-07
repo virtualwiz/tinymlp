@@ -2,6 +2,7 @@
 #include "mlp.h"
 
 int main(){
+
   neurone_input[0] = 1;
   neurone_input[1] = 0;
   neurone_input[2] = 0;

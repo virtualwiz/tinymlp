@@ -43,11 +43,16 @@ void MLP_Dump(){
 
 void MLP_Weights_Init(){
   int i;
+  double rand_weight;
+  time_t t;
+  srand((unsigned) time(&t));
   for(i = 0; i < NUM_NEURONES_INPUT * NUM_NEURONES_HIDDEN; i++){
-    *(*(weight_i_h) + i) = 1;
+    rand_weight = (double)(rand() % 200) / 100 - 1;
+    *(*(weight_i_h) + i) = rand_weight;
   }
   for(i = 0; i < NUM_NEURONES_HIDDEN * NUM_NEURONES_OUTPUT; i++){
-    *(*(weight_h_o) + i) = 1;
+    rand_weight = (double)(rand() % 200) / 100 - 1;
+    *(*(weight_h_o) + i) = rand_weight;
   }
 }
 

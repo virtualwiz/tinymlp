@@ -3,6 +3,21 @@
 #include "math.h"
 #endif
 
+#ifndef STDLIB_H
+#define STDLIB_H
+#include "stdlib.h"
+#endif
+
+#ifndef STDIO_H
+#define STDIO_H
+#include "stdio.h"
+#endif
+
+#ifndef TIME_H
+#define TIME_H
+#include "time.h"
+#endif
+
 #ifndef MLP_H
 #define MLP_H
 
@@ -22,6 +37,7 @@ double neurone_output[NUM_NEURONES_OUTPUT];
 double weight_i_h[NUM_NEURONES_INPUT][NUM_NEURONES_HIDDEN];
 double weight_h_o[NUM_NEURONES_HIDDEN][NUM_NEURONES_OUTPUT];
 
+extern void MLP_Dump();
 extern void MLP_Weights_Init();
 extern void MLP_Evaluate();
 
