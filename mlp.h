@@ -37,6 +37,7 @@ double neurone_output[NUM_NEURONES_OUTPUT];
 double weight_i_h[NUM_NEURONES_INPUT][NUM_NEURONES_HIDDEN];
 double weight_h_o[NUM_NEURONES_HIDDEN][NUM_NEURONES_OUTPUT];
 
+extern double error(int num_neurones, double* real_output, double* expected_output);
 extern void MLP_Dump();
 extern void MLP_Weights_Init();
 extern void MLP_Evaluate();

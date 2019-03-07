@@ -8,8 +8,19 @@ double dsigmoid(double x){
   return sigmoid(x) * (1 - sigmoid(x));
 }
 
+double error(int num_neurones, double* real_output, double* expected_output){
+  double diff = 0;
+  int i;
+  for(i = 0; i < num_neurones; i++){
+    diff += 0.5 * pow((*(real_output + i) - *(expected_output + i)), 2);
+  }
+  return diff;
+}
+
 void MLP_Dump(){
   int i,j;
+  double expected[4] = {1, 0, 0, 0};
+
   printf("Input layer:\t");
   for(i = 0; i < NUM_NEURONES_INPUT; i++){
     printf("%lf\t", neurone_input[i]);
@@ -38,6 +49,10 @@ void MLP_Dump(){
   for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
     printf("%lf\t", neurone_output[i]);
   }
+  printf("\n");
+
+  printf("Output error:\t");
+  printf("%lf", error(NUM_NEURONES_OUTPUT, neurone_output, expected));
   printf("\n");
 }
 
