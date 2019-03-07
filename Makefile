@@ -1,5 +1,5 @@
 demo: mlp.o demo.o
-	gcc -Wall -lm mlp.o demo.o -o demo
+	gcc -Wall mlp.o demo.o -lm -o demo
 
 demo.o: demo.c
 	gcc -Wall -c demo.c

@@ -8,13 +8,46 @@ double dsigmoid(double x){
   return sigmoid(x) * (1 - sigmoid(x));
 }
 
+void MLP_Dump(){
+  int i,j;
+  printf("Input layer:\t");
+  for(i = 0; i < NUM_NEURONES_INPUT; i++){
+    printf("%lf\t", neurone_input[i]);
+  }
+  printf("\n");
+  for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
+    printf("W to hidden%d:\t",i);
+    for(j = 0; j < NUM_NEURONES_INPUT; j++){
+      printf("%lf\t", weight_i_h[j][i]);
+    }
+    printf("\n");
+  }
+  printf("Hidden layer:\t");
+  for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
+    printf("%lf\t", neurone_hidden[i]);
+  }
+  printf("\n");
+  for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
+    printf("W To output%d:\t",i);
+    for(j = 0; j < NUM_NEURONES_HIDDEN; j++){
+      printf("%lf\t", weight_h_o[j][i]);
+    }
+    printf("\n");
+  }
+  printf("Output layer:\t");
+  for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
+    printf("%lf\t", neurone_output[i]);
+  }
+  printf("\n");
+}
+
 void MLP_Weights_Init(){
   int i;
   for(i = 0; i < NUM_NEURONES_INPUT * NUM_NEURONES_HIDDEN; i++){
-    **(weight_i_h + i) = 1;
+    *(*(weight_i_h) + i) = 1;
   }
   for(i = 0; i < NUM_NEURONES_HIDDEN * NUM_NEURONES_OUTPUT; i++){
-    **(weight_h_o + i) = 1;
+    *(*(weight_h_o) + i) = 1;
   }
 }
 
