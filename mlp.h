@@ -22,9 +22,9 @@
 #define MLP_H
 
 #define HIGH 1
-#define HIGH_SOFT 0.9
+#define SOFT_HIGH 0.9
 #define LOW 0
-#define LOW_SOFT 0.1
+#define SOFT_LOW 0.1
 
 #define NUM_NEURONES_INPUT 4
 #define NUM_NEURONES_HIDDEN 2
@@ -41,5 +41,6 @@ extern double error(int num_neurones, double* real_output, double* expected_outp
 extern void MLP_Dump();
 extern void MLP_Weights_Init();
 extern void MLP_Evaluate();
+extern void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate, double** x, double** y);
 
 #endif

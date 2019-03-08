@@ -19,7 +19,6 @@ double error(int num_neurones, double* real_output, double* expected_output){
 
 void MLP_Dump(){
   int i,j;
-  double expected[4] = {1, 0, 0, 0};
 
   printf("Input layer:\t");
   for(i = 0; i < NUM_NEURONES_INPUT; i++){
@@ -52,7 +51,7 @@ void MLP_Dump(){
   printf("\n");
 
   printf("Output error:\t");
-  printf("%lf", error(NUM_NEURONES_OUTPUT, neurone_output, expected));
+  printf("%lf", error(NUM_NEURONES_OUTPUT, neurone_output, neurone_input));
   printf("\n");
 }
 
@@ -88,6 +87,46 @@ void MLP_Evaluate(){
       sum_output[i_output] += neurone_hidden[i_hidden] * weight_h_o[i_hidden][i_output];
     }
     neurone_output[i_output] = sigmoid(sum_output[i_output]);
+  }
+}
+
+void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate, double** x, double** y){
+  int i, k, i_epoch, i_pattern;
+  double deltaj_output[NUM_NEURONES_OUTPUT];
+  double deltaj_hidden[NUM_NEURONES_HIDDEN];
+  double sumk_hidden;
+  for(i_epoch = 1; i_epoch <= num_epoches; i_epoch++){
+    for(i_pattern = 0; i_pattern < num_patterns; i_pattern++){
+      /* Feed training vector */
+      for(i = 0; i < NUM_NEURONES_INPUT; i++){
+        neurone_input[i] = x[i_pattern][i];
+      }
+      /* Forward propagate */
+      MLP_Evaluate();
+      /* Compute delta for output layer */
+      for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
+        deltaj_output[i] = (neurone_output[i] - y[i_pattern][i]) * neurone_output[i] * (1 - neurone_output[i]);
+      }
+      /* Compute delta for hidden layer */
+      for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
+        for(k = 0; k < NUM_NEURONES_OUTPUT; k++){
+          sumk_hidden += (weight_h_o[i][k] * deltaj_output[k]);
+        }
+        deltaj_hidden[i] = sumk_hidden * neurone_hidden[i] * (1 - neurone_hidden[i]);
+      }
+      /* Rebuild weight_i_h matrix */
+      for(i = 0; i < NUM_NEURONES_INPUT; i++){
+        for(k = 0; k < NUM_NEURONES_HIDDEN; k++){
+          weight_i_h[i][k] -= learning_rate * deltaj_hidden[k] * neurone_input[i];
+        }
+      }
+      /* Rebuild weight_h_o matrix */
+      for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
+        for(k = 0; k < NUM_NEURONES_OUTPUT; k++){
+          weight_h_o[i][k] -= learning_rate * deltaj_output[k] * neurone_hidden[i];
+        }
+      }
+    }
   }
 }
 
