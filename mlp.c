@@ -90,7 +90,7 @@ void MLP_Evaluate(){
   }
 }
 
-void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate, double** x, double** y){
+void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate, double* x, double* y){
   int i, k, i_epoch, i_pattern;
   double deltaj_output[NUM_NEURONES_OUTPUT];
   double deltaj_hidden[NUM_NEURONES_HIDDEN];
@@ -99,13 +99,13 @@ void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate,
     for(i_pattern = 0; i_pattern < num_patterns; i_pattern++){
       /* Feed training vector */
       for(i = 0; i < NUM_NEURONES_INPUT; i++){
-        neurone_input[i] = x[i_pattern][i];
+        neurone_input[i] = x[NUM_NEURONES_INPUT * i_pattern + i];
       }
       /* Forward propagate */
       MLP_Evaluate();
       /* Compute delta for output layer */
       for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
-        deltaj_output[i] = (neurone_output[i] - y[i_pattern][i]) * neurone_output[i] * (1 - neurone_output[i]);
+        deltaj_output[i] = (neurone_output[i] - y[NUM_NEURONES_INPUT * i_pattern + i]) * neurone_output[i] * (1 - neurone_output[i]);
       }
       /* Compute delta for hidden layer */
       for(i = 0; i < NUM_NEURONES_HIDDEN; i++){

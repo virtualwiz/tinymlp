@@ -41,6 +41,6 @@ extern double error(int num_neurones, double* real_output, double* expected_outp
 extern void MLP_Dump();
 extern void MLP_Weights_Init();
 extern void MLP_Evaluate();
-extern void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate, double** x, double** y);
+extern void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate, double* x, double* y);
 
 #endif
