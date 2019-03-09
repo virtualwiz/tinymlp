@@ -12,8 +12,7 @@ int main(){
   };
 
   MLP_Weights_Init();
-  MLP_Dump();
-  MLP_Train(NUM_PATTERNS, 1000, 0.0001, pattern_set, pattern_set);
+  MLP_Train(NUM_PATTERNS, 3000, 0.0002, pattern_set, pattern_set);
   MLP_Dump();
 
   return 0;

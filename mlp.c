@@ -17,6 +17,25 @@ double error(int num_neurones, double* real_output, double* expected_output){
   return diff;
 }
 
+double MLP_ErrorAvg(int num_test_patterns, double* x, double* y){
+  int i_pattern;
+  int i_input;
+  double avg_error = 0;
+  for(i_pattern = 0; i_pattern < num_test_patterns; i_pattern++){
+    /* Feed testing vector */
+    for(i_input = 0; i_input < NUM_NEURONES_INPUT; i_input++){
+      neurone_input[i_input] = x[NUM_NEURONES_INPUT * i_pattern + i_input];
+    }
+    /* Forward propagate */
+    MLP_Evaluate();
+    /* Accumulate error for one pattern */
+    avg_error += error(NUM_NEURONES_OUTPUT, neurone_output, neurone_input);
+  }
+  /* Compute average error for pattern set */
+  avg_error /= num_test_patterns;
+  return avg_error;
+}
+
 void MLP_Dump(){
   int i,j;
 
@@ -48,10 +67,6 @@ void MLP_Dump(){
   for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
     printf("%lf\t", neurone_output[i]);
   }
-  printf("\n");
-
-  printf("Output error:\t");
-  printf("%lf", error(NUM_NEURONES_OUTPUT, neurone_output, neurone_input));
   printf("\n");
 }
 
@@ -126,7 +141,9 @@ void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate,
           weight_h_o[i][k] -= learning_rate * deltaj_output[k] * neurone_hidden[i];
         }
       }
+      MLP_Dump();
     }
+    printf("Avg error: %lf\n", MLP_ErrorAvg(num_patterns, x, y));
   }
 }
 
