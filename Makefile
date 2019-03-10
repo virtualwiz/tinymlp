@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -g
 RM = rm -f
 
 demo: mlp.o demo.o

@@ -106,45 +106,41 @@ void MLP_Evaluate(){
   }
 }
 
-void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate, double* x, double* y){
-  int i, k, i_epoch, i_pattern;
+void MLP_Train(int num_patterns, double learning_rate, double* x, double* y){
+  int i, k, i_pattern;
   double delta_output[NUM_NEURONES_OUTPUT];
   double delta_hidden[NUM_NEURONES_HIDDEN];
   double sumk_hidden;
-  for(i_epoch = 1; i_epoch <= num_epoches; i_epoch++){
-    for(i_pattern = 0; i_pattern < num_patterns; i_pattern++){
-      /* Feed training vector */
-      for(i = 0; i < NUM_NEURONES_INPUT; i++){
-        neurone_input[i] = x[NUM_NEURONES_INPUT * i_pattern + i];
-      }
-      /* Forward propagate */
-      MLP_Evaluate();
-      /* Compute delta for output layer */
-      for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
-        delta_output[i] = (neurone_output[i] - y[NUM_NEURONES_INPUT * i_pattern + i]) * neurone_output[i] * (1 - neurone_output[i]);
-      }
-      /* Compute delta for hidden layer */
-      for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
-        for(k = 0; k < NUM_NEURONES_OUTPUT; k++){
-          sumk_hidden += weight_h_o[i][k] * delta_output[k];
-        }
-        delta_hidden[i] = sumk_hidden * neurone_hidden[i] * (1 - neurone_hidden[i]);
-      }
-      /* Rebuild weight_i_h matrix */
-      for(i = 0; i < NUM_NEURONES_INPUT; i++){
-        for(k = 0; k < NUM_NEURONES_HIDDEN; k++){
-          weight_i_h[i][k] -= learning_rate * delta_hidden[k] * neurone_input[i];
-        }
-      }
-      /* Rebuild weight_h_o matrix */
-      for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
-        for(k = 0; k < NUM_NEURONES_OUTPUT; k++){
-          weight_h_o[i][k] -= learning_rate * delta_output[k] * neurone_hidden[i];
-        }
-      }
-      //MLP_Dump();
+  for(i_pattern = 0; i_pattern < num_patterns; i_pattern++){
+    /* Feed training vector */
+    for(i = 0; i < NUM_NEURONES_INPUT; i++){
+      neurone_input[i] = x[NUM_NEURONES_INPUT * i_pattern + i];
     }
-    printf("Avg error: %lf\n", MLP_ErrorAvg(num_patterns, x, y));
+    /* Forward propagate */
+    MLP_Evaluate();
+    /* Compute delta for output layer */
+    for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
+      delta_output[i] = (neurone_output[i] - y[NUM_NEURONES_INPUT * i_pattern + i]) * neurone_output[i] * (1 - neurone_output[i]);
+    }
+    /* Compute delta for hidden layer */
+    for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
+      for(k = 0; k < NUM_NEURONES_OUTPUT; k++){
+        sumk_hidden += weight_h_o[i][k] * delta_output[k];
+      }
+      delta_hidden[i] = sumk_hidden * neurone_hidden[i] * (1 - neurone_hidden[i]);
+    }
+    /* Rebuild weight_i_h matrix */
+    for(i = 0; i < NUM_NEURONES_INPUT; i++){
+      for(k = 0; k < NUM_NEURONES_HIDDEN; k++){
+        weight_i_h[i][k] -= learning_rate * delta_hidden[k] * neurone_input[i];
+      }
+    }
+    /* Rebuild weight_h_o matrix */
+    for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
+      for(k = 0; k < NUM_NEURONES_OUTPUT; k++){
+        weight_h_o[i][k] -= learning_rate * delta_output[k] * neurone_hidden[i];
+      }
+    }
   }
 }
 

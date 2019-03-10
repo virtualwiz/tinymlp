@@ -21,15 +21,6 @@
 #ifndef MLP_H
 #define MLP_H
 
-/*****************************************************************/
-/* DEBUG_LEVEL:                                                  */
-/* 0: Disable debugging                                          */
-/* 1: Log average error after each epoch                         */
-/* 2: Log average error and neurones / weights in neural network */
-/*****************************************************************/
-
-#define DEBUG_LEVEL 2
-
 #define HIGH 1
 #define SOFT_HIGH 0.9
 #define LOW 0
@@ -51,6 +42,6 @@ extern double MLP_ErrorAvg(int num_test_patterns, double* x, double* y);
 extern void MLP_Dump();
 extern void MLP_Weights_Init();
 extern void MLP_Evaluate();
-extern void MLP_Train(int num_patterns, unsigned int num_epoches, double learning_rate, double* x, double* y);
+extern void MLP_Train(int num_patterns, double learning_rate, double* x, double* y);
 
 #endif
