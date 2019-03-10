@@ -1,12 +1,16 @@
+CC = gcc
+CFLAGS = -Wall
+RM = rm -f
+
 demo: mlp.o demo.o
-	gcc -Wall mlp.o demo.o -lm -o demo
+	${CC} ${CFLAGS} mlp.o demo.o -lm -o demo
 
 demo.o: demo.c
-	gcc -Wall -c demo.c
+	${CC} ${CFLAGS} -c demo.c
 
 mlp.o: mlp.c mlp.h
-	gcc -Wall -c mlp.c
+	${CC} ${CFLAGS} -c mlp.c
 
 clean:
-	rm *.o
-	rm demo
+	${RM} *.o
+	${RM} demo
