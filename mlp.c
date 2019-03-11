@@ -1,13 +1,11 @@
 #include "mlp.h"
 
+/* S-shaped sigmoid activation function. */
 double sigmoid(double x){
   return 1 / (1 + (exp(-x)));
 }
 
-double dsigmoid(double x){
-  return sigmoid(x) * (1 - sigmoid(x));
-}
-
+/* Compute output error based on one pattern */
 double error(int num_neurones, double* real_output, double* expected_output){
   double diff = 0;
   int i;
@@ -17,6 +15,7 @@ double error(int num_neurones, double* real_output, double* expected_output){
   return diff;
 }
 
+/* Compute average error based on a set of patterns. */
 double MLP_ErrorAvg(int num_test_patterns, double* x, double* y){
   int i_pattern;
   int i_input;
@@ -36,10 +35,13 @@ double MLP_ErrorAvg(int num_test_patterns, double* x, double* y){
   return avg_error;
 }
 
+/* Print information in the neural network.
+   Mode 1: Display neurons' output and error.
+   Mode 2: Display weight matrices. */
 void MLP_Dump(short int mode){
   int i,j;
   if(mode){
-    printf("***** Start NEURONS dumping *****\n");
+    printf("***** Start NEURONES dumping *****\n");
     printf("Input_layer:\t");
     for(i = 0; i < NUM_NEURONES_INPUT + 1; i++){
       printf("%lf\t", neurone_input[i]);
@@ -76,7 +78,9 @@ void MLP_Dump(short int mode){
   }
 }
 
-void MLP_Weights_Init(){
+/* Initialise weight matrices and bias neurones
+   in the neural network. */
+void MLP_Init(){
   int i;
   double rand_weight;
   time_t t;
@@ -95,6 +99,7 @@ void MLP_Weights_Init(){
   neurone_hidden[NUM_NEURONES_HIDDEN] = 1;
 }
 
+/* Do one iteration of forward propagation. */
 void MLP_Evaluate(){
   int i_input, i_hidden, i_output;
   double sum_hidden[NUM_NEURONES_HIDDEN + 1] = {0}, sum_output[NUM_NEURONES_OUTPUT] = {0};
@@ -115,6 +120,7 @@ void MLP_Evaluate(){
   }
 }
 
+/* Do one iteration of back propagation and weights update. */
 void MLP_Train(int num_patterns, double learning_rate, double* x, double* y){
   int i, k, i_pattern;
   double delta_output[NUM_NEURONES_OUTPUT];

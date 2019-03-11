@@ -2,27 +2,39 @@
 #include "stdlib.h"
 #include "mlp.h"
 
+/* Set to 1 to write errors into a .csv file,
+   for plotting and observation. */
 #define DATA_LOG_ENABLED 0
-#define EPOCH_LIMIT_MODE 0
-
-#define NUM_PATTERNS 4
-#define NUM_EPOCHES 100000
-#define LEARNING_RATE 0.01
-#define TARGET_ERROR 0.004
 #define REPORT_INTERVAL 100000
 
+/* Set to 1 to limit number of epoches */
+#define EPOCH_LIMIT_MODE 0
+#define NUM_EPOCHES 100000
+#define TARGET_ERROR 0.004
+
+/* Training and testing sets size(number of patterns) */
+#define NUM_PATTERNS 4
+
+/* Learning rate(between 0 and 1) */
+#define LEARNING_RATE 0.01
+
 int main(){
+  /* Training and testing set.
+     In an autoencoder they are same.
+     TODO: Load pattern sets from external files. */
   double pattern_set[NUM_PATTERNS * NUM_NEURONES_INPUT] = {
     SOFT_HIGH, SOFT_LOW, SOFT_LOW, SOFT_LOW,
     SOFT_LOW, SOFT_HIGH, SOFT_LOW, SOFT_LOW,
     SOFT_LOW, SOFT_LOW, SOFT_HIGH, SOFT_LOW,
     SOFT_LOW, SOFT_LOW, SOFT_LOW, SOFT_HIGH,
   };
+
   int i, j;
   unsigned long int i_epoch = 0;
   double mlp_err;
 
 #if DATA_LOG_ENABLED
+  /* Open error log file. */
   FILE* logfile_ptr;
   logfile_ptr = fopen("error_log.csv", "w");
   if(logfile_ptr == NULL){
@@ -30,8 +42,8 @@ int main(){
   }
 #endif
 
-  /* Initialise all weight matrices in neural network */
-  MLP_Weights_Init();
+  /* Initialise the neural network. */
+  MLP_Init();
 
   mlp_err = MLP_ErrorAvg(NUM_PATTERNS, pattern_set, pattern_set);
   printf("Initial avg error is %lf\n", mlp_err);
@@ -72,6 +84,7 @@ int main(){
   }
 
 #if DATA_LOG_ENABLED
+  /* Close log file */
   fclose(logfile_ptr);
 #endif
 
