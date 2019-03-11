@@ -8,8 +8,8 @@
 #define NUM_PATTERNS 4
 #define NUM_EPOCHES 100000
 #define LEARNING_RATE 0.01
-#define TARGET_ERROR 0.1
-#define REPORT_INTERVAL 10000
+#define TARGET_ERROR 0.004
+#define REPORT_INTERVAL 100000
 
 int main(){
   double pattern_set[NUM_PATTERNS * NUM_NEURONES_INPUT] = {
@@ -62,12 +62,13 @@ int main(){
   }
 
   /* Test the neural network with patterns */
+  MLP_Dump(0);
   for(j = 0; j < NUM_PATTERNS; j++){
     for(i = 0; i < NUM_NEURONES_INPUT; i++){
       neurone_input[i] = pattern_set[NUM_NEURONES_INPUT * j + i];
     }
     MLP_Evaluate();
-    MLP_Dump();
+    MLP_Dump(1);
   }
 
 #if DATA_LOG_ENABLED

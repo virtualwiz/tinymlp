@@ -36,70 +36,79 @@ double MLP_ErrorAvg(int num_test_patterns, double* x, double* y){
   return avg_error;
 }
 
-void MLP_Dump(){
+void MLP_Dump(short int mode){
   int i,j;
-  printf("***** Start network dumping *****\n");
-  printf("Input_layer:\t");
-  for(i = 0; i < NUM_NEURONES_INPUT; i++){
-    printf("%lf\t", neurone_input[i]);
-  }
-  printf("\n");
-  for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
-    printf("W to hidden%d:\t",i);
-    for(j = 0; j < NUM_NEURONES_INPUT; j++){
-      printf("%lf\t", weight_i_h[j][i]);
+  if(mode){
+    printf("***** Start NEURONS dumping *****\n");
+    printf("Input_layer:\t");
+    for(i = 0; i < NUM_NEURONES_INPUT + 1; i++){
+      printf("%lf\t", neurone_input[i]);
     }
     printf("\n");
-  }
-  printf("Hidden_layer:\t");
-  for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
-    printf("%lf\t", neurone_hidden[i]);
-  }
-  printf("\n");
-  for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
-    printf("W to output%d:\t",i);
-    for(j = 0; j < NUM_NEURONES_HIDDEN; j++){
-      printf("%lf\t", weight_h_o[j][i]);
+    printf("Hidden_layer:\t");
+    for(i = 0; i < NUM_NEURONES_HIDDEN + 1; i++){
+      printf("%lf\t", neurone_hidden[i]);
     }
     printf("\n");
+    printf("Output_layer:\t");
+    for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
+      printf("%lf\t", neurone_output[i]);
+    }
+    printf("\n");
+    printf("Err: %lf\n", error(NUM_NEURONES_OUTPUT, neurone_output, neurone_input));
   }
-  printf("Output_layer:\t");
-  for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
-    printf("%lf\t", neurone_output[i]);
+  else{
+    printf("***** Start WEIGHTS dumping *****\n");
+    for(i = 0; i < NUM_NEURONES_HIDDEN + 1; i++){
+      printf("W to hidden%d:\t",i);
+      for(j = 0; j < NUM_NEURONES_INPUT + 1; j++){
+        printf("%lf\t", weight_i_h[j][i]);
+      }
+      printf("\n");
+    }
+    for(i = 0; i < NUM_NEURONES_OUTPUT; i++){
+      printf("W to output%d:\t",i);
+      for(j = 0; j < NUM_NEURONES_HIDDEN + 1; j++){
+        printf("%lf\t", weight_h_o[j][i]);
+      }
+      printf("\n");
+    }
   }
-  printf("\n");
-  printf("Err: %lf\n", error(NUM_NEURONES_OUTPUT, neurone_output, neurone_input));
 }
 
 void MLP_Weights_Init(){
   int i;
   double rand_weight;
   time_t t;
+  /* Initialise weight matrices */
   srand((unsigned) time(&t));
-  for(i = 0; i < NUM_NEURONES_INPUT * NUM_NEURONES_HIDDEN; i++){
+  for(i = 0; i < (NUM_NEURONES_INPUT + 1) * (NUM_NEURONES_HIDDEN + 1); i++){
     rand_weight = (double)(rand() % 200) / 100 - 1;
     *(*(weight_i_h) + i) = rand_weight;
   }
-  for(i = 0; i < NUM_NEURONES_HIDDEN * NUM_NEURONES_OUTPUT; i++){
+  for(i = 0; i < (NUM_NEURONES_HIDDEN + 1) * NUM_NEURONES_OUTPUT; i++){
     rand_weight = (double)(rand() % 200) / 100 - 1;
     *(*(weight_h_o) + i) = rand_weight;
   }
+  /* Initialise bias neurones */
+  neurone_input[NUM_NEURONES_INPUT] = 1;
+  neurone_hidden[NUM_NEURONES_HIDDEN] = 1;
 }
 
 void MLP_Evaluate(){
   int i_input, i_hidden, i_output;
-  double sum_hidden[NUM_NEURONES_HIDDEN] = {0}, sum_output[NUM_NEURONES_OUTPUT] = {0};
+  double sum_hidden[NUM_NEURONES_HIDDEN + 1] = {0}, sum_output[NUM_NEURONES_OUTPUT] = {0};
 
   /* Evaluate sums, apply activation function and write to neurones */
   for(i_hidden = 0; i_hidden < NUM_NEURONES_HIDDEN; i_hidden++){
-    for(i_input = 0; i_input < NUM_NEURONES_INPUT; i_input++){
+    for(i_input = 0; i_input < NUM_NEURONES_INPUT + 1; i_input++){
       sum_hidden[i_hidden] += neurone_input[i_input] * weight_i_h[i_input][i_hidden];
     }
     neurone_hidden[i_hidden] = sigmoid(sum_hidden[i_hidden]);
   }
 
   for(i_output = 0; i_output < NUM_NEURONES_OUTPUT; i_output++){
-    for(i_hidden = 0; i_hidden < NUM_NEURONES_HIDDEN; i_hidden++){
+    for(i_hidden = 0; i_hidden < NUM_NEURONES_HIDDEN + 1; i_hidden++){
       sum_output[i_output] += neurone_hidden[i_hidden] * weight_h_o[i_hidden][i_output];
     }
     neurone_output[i_output] = sigmoid(sum_output[i_output]);
@@ -109,7 +118,7 @@ void MLP_Evaluate(){
 void MLP_Train(int num_patterns, double learning_rate, double* x, double* y){
   int i, k, i_pattern;
   double delta_output[NUM_NEURONES_OUTPUT];
-  double delta_hidden[NUM_NEURONES_HIDDEN];
+  double delta_hidden[NUM_NEURONES_HIDDEN + 1];
   double sumk_hidden;
   for(i_pattern = 0; i_pattern < num_patterns; i_pattern++){
     /* Feed training vector */
@@ -123,20 +132,20 @@ void MLP_Train(int num_patterns, double learning_rate, double* x, double* y){
       delta_output[i] = (neurone_output[i] - y[NUM_NEURONES_INPUT * i_pattern + i]) * neurone_output[i] * (1 - neurone_output[i]);
     }
     /* Compute delta for hidden layer */
-    for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
+    for(i = 0; i < NUM_NEURONES_HIDDEN + 1; i++){
       for(k = 0; k < NUM_NEURONES_OUTPUT; k++){
         sumk_hidden += weight_h_o[i][k] * delta_output[k];
       }
       delta_hidden[i] = sumk_hidden * neurone_hidden[i] * (1 - neurone_hidden[i]);
     }
     /* Rebuild weight_i_h matrix */
-    for(i = 0; i < NUM_NEURONES_INPUT; i++){
-      for(k = 0; k < NUM_NEURONES_HIDDEN; k++){
+    for(i = 0; i < NUM_NEURONES_INPUT + 1; i++){
+      for(k = 0; k < NUM_NEURONES_HIDDEN + 1; k++){
         weight_i_h[i][k] -= learning_rate * delta_hidden[k] * neurone_input[i];
       }
     }
     /* Rebuild weight_h_o matrix */
-    for(i = 0; i < NUM_NEURONES_HIDDEN; i++){
+    for(i = 0; i < NUM_NEURONES_HIDDEN + 1; i++){
       for(k = 0; k < NUM_NEURONES_OUTPUT; k++){
         weight_h_o[i][k] -= learning_rate * delta_output[k] * neurone_hidden[i];
       }
