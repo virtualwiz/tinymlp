@@ -1,3 +1,9 @@
+/* Copyright (C) 2019 S Du, R Jiao, University of Birmingham.
+   This program is part of tinyMLP project: simple multi layer
+   perceptron library and demonstration program.
+   This program contains source code of tinyMLP library.
+*/
+
 #include "mlp.h"
 
 /* S-shaped sigmoid activation function. */

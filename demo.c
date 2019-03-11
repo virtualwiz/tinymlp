@@ -1,16 +1,23 @@
-#include "stdio.h"
+/* Copyright (C) 2019 S Du, R Jiao, University of Birmingham.
+   This program is part of tinyMLP project: simple multi layer
+   perceptron library and demonstration program.
+   This program implemented, trained and tested an autoencoder
+   neural network with an example dataset.
+   The patterns are to be automatically binary-encoded.
+*/
+
 #include "stdlib.h"
 #include "mlp.h"
 
 /* Set to 1 to write errors into a .csv file,
    for plotting and observation. */
-#define DATA_LOG_ENABLED 0
-#define REPORT_INTERVAL 100000
+#define DATA_LOG_ENABLED 1
+#define REPORT_INTERVAL 1000
 
 /* Set to 1 to limit number of epoches */
 #define EPOCH_LIMIT_MODE 0
-#define NUM_EPOCHES 100000
-#define TARGET_ERROR 0.004
+#define NUM_EPOCHES 300000
+#define TARGET_ERROR 0.005
 
 /* Training and testing sets size(number of patterns) */
 #define NUM_PATTERNS 4

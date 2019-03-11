@@ -1,3 +1,10 @@
+/* Copyright (C) 2019 S Du, R Jiao, University of Birmingham.
+   This program is part of tinyMLP project: simple multi layer
+   perceptron library and demonstration program.
+   This file is the header file of tinyMLP library.
+   Structure of the neural network is defined in this file.
+*/
+
 #ifndef MATH_H
 #define MATH_H
 #include "math.h"
