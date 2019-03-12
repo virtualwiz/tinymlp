@@ -11,8 +11,8 @@
 
 /* Set to 1 to write errors into a .csv file,
    for plotting and observation. */
-#define DATA_LOG_ENABLED 1
-#define REPORT_INTERVAL 1000
+#define DATA_LOG_ENABLED 0
+#define REPORT_INTERVAL 10000
 
 /* Set to 1 to limit number of epoches */
 #define EPOCH_LIMIT_MODE 0
