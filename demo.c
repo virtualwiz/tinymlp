@@ -14,9 +14,9 @@
 #define DATA_LOG_ENABLED 0
 #define REPORT_INTERVAL 10000
 
-/* Set to 1 to limit number of epoches */
+/* Set to 1 to limit number of epochs */
 #define EPOCH_LIMIT_MODE 0
-#define NUM_EPOCHES 300000
+#define NUM_EPOCHS 300000
 #define TARGET_ERROR 0.005
 
 /* Training and testing sets size(number of patterns) */
@@ -64,13 +64,13 @@ int main(){
     i_epoch += 1;
     mlp_err = MLP_ErrorAvg(NUM_PATTERNS, pattern_set, pattern_set);
     if(!(i_epoch % REPORT_INTERVAL)){
-      printf("Avg error is %lf\tafter %ld epoches\n", mlp_err, i_epoch);
+      printf("Avg error is %lf\tafter %ld epochs\n", mlp_err, i_epoch);
 #if DATA_LOG_ENABLED
       fprintf(logfile_ptr, "%ld,%lf\n", i_epoch, mlp_err);
 #endif
     }
 #if EPOCH_LIMIT_MODE
-    if(mlp_err <= TARGET_ERROR || i_epoch == NUM_EPOCHES){
+    if(mlp_err <= TARGET_ERROR || i_epoch == NUM_EPOCHS){
       break;
     }
 #else
