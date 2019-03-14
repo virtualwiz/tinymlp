@@ -11,12 +11,14 @@
 
 /* Set to 1 to write errors into a .csv file,
    for plotting and observation. */
-#define DATA_LOG_ENABLED 0
+#define DATA_LOG_MODE 0
 #define REPORT_INTERVAL 10000
 
-/* Set to 1 to limit number of epochs */
-#define EPOCH_LIMIT_MODE 0
-#define NUM_EPOCHS 300000
+/* Set to 1 to enable auto reset feature,
+   retry from a different initialisation of weight matrices
+   after NUM_EPOCHS epochs. */
+#define AUTO_RESET_MODE 1
+#define NUM_EPOCHS 3000000
 #define TARGET_ERROR 0.005
 
 /* Training and testing sets size(number of patterns) */
@@ -40,7 +42,7 @@ int main(){
   unsigned long int i_epoch = 0;
   double mlp_err;
 
-#if DATA_LOG_ENABLED
+#if DATA_LOG_MODE
   /* Open error log file. */
   FILE* logfile_ptr;
   logfile_ptr = fopen("error_log.csv", "w");
@@ -54,7 +56,7 @@ int main(){
 
   mlp_err = MLP_ErrorAvg(NUM_PATTERNS, pattern_set, pattern_set);
   printf("Initial avg error is %lf\n", mlp_err);
-#if DATA_LOG_ENABLED
+#if DATA_LOG_MODE
   fprintf(logfile_ptr, "0,%lf\n", mlp_err);
 #endif
 
@@ -65,13 +67,19 @@ int main(){
     mlp_err = MLP_ErrorAvg(NUM_PATTERNS, pattern_set, pattern_set);
     if(!(i_epoch % REPORT_INTERVAL)){
       printf("Avg error is %lf\tafter %ld epochs\n", mlp_err, i_epoch);
-#if DATA_LOG_ENABLED
+#if DATA_LOG_MODE
       fprintf(logfile_ptr, "%ld,%lf\n", i_epoch, mlp_err);
 #endif
     }
-#if EPOCH_LIMIT_MODE
-    if(mlp_err <= TARGET_ERROR || i_epoch == NUM_EPOCHS){
+#if AUTO_RESET_MODE
+    if(mlp_err <= TARGET_ERROR){
       break;
+    }
+    else if(i_epoch == NUM_EPOCHS){
+      /* Retry from another point in error space */
+      printf("Hit epochs limit, resetting weights...\n");
+      MLP_Init();
+      i_epoch = 0;
     }
 #else
     if(mlp_err <= TARGET_ERROR){
@@ -90,7 +98,7 @@ int main(){
     MLP_Dump(1);
   }
 
-#if DATA_LOG_ENABLED
+#if DATA_LOG_MODE
   /* Close log file */
   fclose(logfile_ptr);
 #endif

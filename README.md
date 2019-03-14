@@ -17,4 +17,4 @@ $ make
 $ ./demo
 ```
 
-As the program uses only the basic gradient descent algorithm, it may be trapped in a local optimal solution. If error stops going down please terminate it and run again, it should start from another random point in the error space.
+As the program uses only the basic gradient descent algorithm, it may be trapped in a local optimal solution. If the error function still does not converge to the target value after a certain number of epochs, it will automatically start from another random point in the error space.
