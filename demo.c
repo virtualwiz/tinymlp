@@ -6,8 +6,8 @@
    The patterns are to be automatically binary-encoded.
 */
 
-#include "stdlib.h"
 #include "mlp.h"
+#include "stdio.h"
 
 /* Set to 1 to write errors into a .csv file,
    for plotting and observation. */
