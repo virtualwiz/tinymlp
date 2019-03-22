@@ -8,6 +8,7 @@
 
 #include "mlp.h"
 #include "stdio.h"
+#include "stdlib.h"
 
 /* Set to 1 to write errors into a .csv file,
    for plotting and observation. */
