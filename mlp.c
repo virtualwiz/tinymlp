@@ -131,7 +131,7 @@ void MLP_Train(int num_patterns, double learning_rate, double* x, double* y){
   int i, k, i_pattern;
   double delta_output[NUM_NEURONES_OUTPUT];
   double delta_hidden[NUM_NEURONES_HIDDEN + 1];
-  double sumk_hidden;
+  double sumk_hidden = 0;
   for(i_pattern = 0; i_pattern < num_patterns; i_pattern++){
     /* Feed training vector */
     for(i = 0; i < NUM_NEURONES_INPUT; i++){
